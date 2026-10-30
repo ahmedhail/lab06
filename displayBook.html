@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Book</title>
+    <style>
+        body {
+            font-family: Georgia, "Times New Roman", serif;
+            max-width: 520px;
+            margin: 40px auto;
+            padding: 0 16px;
+            color: #222;
+            line-height: 1.5;
+        }
+        h1 { font-size: 1.6rem; margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 6px; }
+        select {
+            width: 100%;
+            padding: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        #bookDetails {
+            margin-top: 24px;
+            padding: 16px 20px;
+            border-left: 4px solid #2c5f7c;
+            background: #f2f6f8;
+        }
+        #bookDetails p { margin: 6px 0; }
+        .error { color: #b00020; }
+        [hidden] { display: none; }
+    </style>
+</head>
+<body>
+
+    <h1>Book Records</h1>
+
+    <label for="bookSelect">Select a book title</label>
+    <select id="bookSelect">
+        <option value="">-- Select a book --</option>
+    </select>
+
+    <div id="bookDetails" hidden>
+        <p><strong>Title:</strong> <span id="title"></span></p>
+        <p><strong>Author:</strong> <span id="author"></span></p>
+        <p><strong>Publication year:</strong> <span id="year"></span></p>
+        <p><strong>Genres:</strong> <span id="genres"></span></p>
+    </div>
+
+    <p id="message" class="error" hidden></p>
+
+    <script>
+        // GitHub raw link of books.json:
+        // https://raw.githubusercontent.com/<username>/<repository>/main/books.json
+        const JSON_URL = "https://raw.githubusercontent.com/ahmedhail/lab06/main/books.json";
+
+        const select = document.getElementById("bookSelect");
+        const details = document.getElementById("bookDetails");
+        const message = document.getElementById("message");
+        let books = [];
+
+        // 1. Fetch the JSON data from GitHub
+        fetch(JSON_URL)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("HTTP " + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                books = data.Books;
+
+                // 2. Fill the select element with the book titles
+                books.forEach(book => {
+                    const option = document.createElement("option");
+                    option.value = book.title;
+                    option.textContent = book.title;
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => {
+                message.textContent = "Could not load books.json (" + error.message + "). Check the JSON_URL in the script.";
+                message.hidden = false;
+            });
+
+        // 3. When the user selects a title, find the matching book
+        select.addEventListener("change", () => {
+            const book = books.find(b => b.title === select.value);
+
+            if (!book) {
+                details.hidden = true;
+                return;
+            }
+
+            // 4. Display the book details
+            document.getElementById("title").textContent = book.title;
+            document.getElementById("author").textContent = book.author;
+            document.getElementById("year").textContent = book.publicationYear;
+            document.getElementById("genres").textContent = book.genres.join(", ");
+            details.hidden = false;
+        });
+    </script>
+</body>
+</html>
