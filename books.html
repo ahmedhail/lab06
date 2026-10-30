@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books (Console)</title>
+</head>
+<body>
+    <p>Open Inspect &rarr; Console to see the output.</p>
+    <script>
+
+        const bookData = {
+                            "Books":
+                            [
+                                {
+                                    "title":"The Great Gatsby",
+                                    "author":"F. Scott Fitzgerald",
+                                    "publicationYear":1925,
+                                    "genres":["Fiction","Classics"]
+                                },
+                                {
+                                    "title":"To Kill a Mockingbird",
+                                    "author":"Harper Lee",
+                                    "publicationYear":1960,
+                                    "genres":["Fiction","Coming-of-Age"]
+                                }
+                            ]
+                        };
+
+        // The title of the first book
+        console.log(bookData.Books[0].title);
+
+        // The author of the second book
+        console.log(bookData.Books[1].author);
+
+        // The genres of all books
+        bookData.Books.forEach(book => {
+            console.log(book.genres);
+        });
+
+    </script>
+</body>
+</html>
